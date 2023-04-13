@@ -76,12 +76,65 @@ $(() => {
                 } //// if //////
                 else {
                     // 통과시
-                    // 1. DB에 아이디가 있는지 조회후 결과로 처리해야함!(보류)
+                    /* 
+                        [ AJAX로 중복아이디 검사하기! ]
+                        ajax 처리 유형 2가지
+
+                        1) post 방식 처리 메서드
+                        - $.post(URL,data,callback)
+
+                        2) get 방식 처리 메서드
+                        - $.get(URL,callback)
+
+                        3) 위의 2가지 유형 중 선택처리 메서드
+                        - $.ajax({전송할페이지,전송방식,보낼데이터,전송할데이터타입,비동기옵션,성공처리,실패처리}) -> 
+                        보내는 값은 하나! 객체데이터임!
+                        객체 안에 7가지 유형의 데이터를 보냄!
+                    */
+
+                        $.ajax({
+                            
+                            // 1.전송할페이지
+                            url:"./process/chkID.php",
+                            // 2.전송방식(get/post)
+                            type:"post",
+                            // 3.보낼데이터
+                            data:{"mid":$("#mid").val()},
+                            // 4.전송할데이터타입 : 웹문서는 "html"
+                            dataType:"html",
+                            // 5.비동기옵션
+                            // ajax 메서드는 비동기처리됨 다만 현재문서와의 동기처리를 하려면
+                            // 비동기옵션값을 false로 해야함
+                            // pass전역변수를 사용하기 위해 필요
+                            // 최졷 트리거 blur 발생시 순서대로 처리할때 동기화해야하기 때문!
+                            async:false,
+                            // 6.성공처리
+                            success:function(res){ // res 결과값리턴
+                                console.log(res);
+                                if(res==="ok"){
+                                    $("#mid").siblings(".msg").text("멋진 아이디네요!").addClass("on");
+                                }/////ok////
+                                else{ ////아이디 중복시
+                                    $("#mid").siblings(".msg").text("사용중인 아이디입니다").removeClass("on");
+
+                                    // 불통과처리 -> pass 변수 사용이유로 async:false 옵션 사용함!
+                                    pass = false;
+                                }
+                            }, ////success////
+                            // 7.실패처리
+                            // xhr - XMLHttpRequset 객체
+                            // status - 실패상태코드
+                            // error - 에러결과값
+                            error:function(xhr,status,error){
+                                alert("연결실행실패:"+error);
+                            }
+                        }) ////// ajax 메서드
+                    // 1. DB에 아이디가 있는지 조회후 결과로 처리해야함!()
                     // 만약 아이디가 이미 있으면 "이미 사용중이거나 탈퇴한 아이디입니다."
                     // 만약 아이디가 없으면 "멋진 아이디네요!"
 
                     // 2. 메시지 띄우기
-                    $(this).siblings(".msg").text("멋진 아이디네요!").addClass("on"); // 녹색글자
+                    // $(this).siblings(".msg").text("멋진 아이디네요!").addClass("on"); // 녹색글자
                 } /// else ////
             } ///////////// else if : 아이디검사시 ///////////
 
@@ -343,8 +396,15 @@ $(() => {
                 // -> 이 부분이 Promise 처리된 것임!
                 function(res){ // res - 리턴된 결과받는 변수
                     console.log(res);
-
-                }
+                    // 성공시
+                    if(res==="ok"){
+                        alert("회원가입을 축하드립니다!");
+                        location.replace("login.php");
+                    }////if문////
+                    else{ //// 에러발생시
+                        alert("관리자에게 문의하세요~!\n"+res);
+                    }
+                }//// 결과처리함수 /////
             );////////////post 메서드////////////////////
 
             // 일단 페이지 테스트를 위해 기본 서브밋 해준다
