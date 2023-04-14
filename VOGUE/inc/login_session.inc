@@ -28,7 +28,7 @@ session_start();
 
           // 2. 로그인 버튼을 로그아웃 버튼으로 변경하기
           // 대상: .sns a:eq(4) span
-          $(".sns a").eq(4).find("span).text("로그아웃")
+          $(".sns a").eq(4).find("span").text("로그아웃")
           // 툴팁변경하기 -> a요소로 다시 올라감
           .parent().attr("title","로그아웃")
 
