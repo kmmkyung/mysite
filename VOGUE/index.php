@@ -30,6 +30,7 @@
         <script src="./js/main.js"></script>
     </head>
     <body>
+        <!--  -->
         <!-- 1.상단영역 -->
         <!-- #top.on인 경우 슬림상단 디자인 적용 -->
         <div id="top">
